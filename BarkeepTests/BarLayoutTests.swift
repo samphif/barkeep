@@ -4,19 +4,30 @@ import Testing
 
 struct BarLayoutTests {
     @Test func collapsedPushesHiddenSectionOffScreen() {
-        let lengths = BarLayout.lengths(for: .collapsed)
-        #expect(lengths.hidden == BarLayout.collapsedLength)
+        let lengths = BarLayout.lengths(for: .collapsed, collapsedLength: 777)
+        #expect(lengths.hidden == 777)
         #expect(lengths.alwaysHidden == BarLayout.dividerLength)
     }
 
     @Test func expandedKeepsAlwaysHiddenSectionOffScreen() {
-        let lengths = BarLayout.lengths(for: .expanded)
+        let lengths = BarLayout.lengths(for: .expanded, collapsedLength: 777)
         #expect(lengths.hidden == BarLayout.dividerLength)
-        #expect(lengths.alwaysHidden == BarLayout.collapsedLength)
+        #expect(lengths.alwaysHidden == 777)
+    }
+
+    @Test func collapsedLengthStaysUnderHalfOfNarrowestScreen() {
+        let length = BarLayout.collapsedLength(screenWidths: [2560, 1728, 1920])
+        #expect(length == 777)
+        #expect(length < 1728 / 2)
+    }
+
+    @Test func collapsedLengthFallsBackWithoutScreens() {
+        #expect(BarLayout.collapsedLength(screenWidths: []) == BarLayout.fallbackCollapsedLength)
+        #expect(BarLayout.collapsedLength(screenWidths: [0]) == BarLayout.fallbackCollapsedLength)
     }
 
     @Test func expandedAllShowsEverything() {
-        let lengths = BarLayout.lengths(for: .expandedAll)
+        let lengths = BarLayout.lengths(for: .expandedAll, collapsedLength: 777)
         #expect(lengths.hidden == BarLayout.dividerLength)
         #expect(lengths.alwaysHidden == BarLayout.dividerLength)
     }

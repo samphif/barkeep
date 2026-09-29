@@ -31,6 +31,16 @@ final class MenuBarController: NSObject {
 
         configureItems()
         configureScrollMonitor()
+        NotificationCenter.default.addObserver(
+            forName: NSApplication.didChangeScreenParametersNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            MainActor.assumeIsolated {
+                guard let self else { return }
+                self.apply(self.state)
+            }
+        }
         hotKey = GlobalHotKey(keyCode: kVK_ANSI_B, modifiers: controlKey | optionKey | cmdKey) { [weak self] in
             self?.toggle()
         }
@@ -113,7 +123,8 @@ final class MenuBarController: NSObject {
 
     private func apply(_ newState: RevealState) {
         state = newState
-        let lengths = BarLayout.lengths(for: newState)
+        let collapsedLength = BarLayout.collapsedLength(screenWidths: NSScreen.screens.map(\.frame.width))
+        let lengths = BarLayout.lengths(for: newState, collapsedLength: collapsedLength)
         hiddenDivider.length = lengths.hidden
         alwaysHiddenDivider.length = lengths.alwaysHidden
         toggleItem.button?.image = newState == .collapsed ? StatusImages.showHidden : StatusImages.hideItems
