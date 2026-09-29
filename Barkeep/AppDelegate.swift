@@ -10,7 +10,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             NSApp.terminate(nil)
             return
         }
-        controller = MenuBarController(settings: Settings(defaults: .standard))
+        let controller = MenuBarController(settings: Settings(defaults: .standard))
+        controller.start()
+        self.controller = controller
     }
 
     private static var isRunningTests: Bool {

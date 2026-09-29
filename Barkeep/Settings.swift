@@ -1,9 +1,28 @@
 import Foundation
 
+enum RehideDelay: Int, CaseIterable {
+    case fiveSeconds = 5
+    case tenSeconds = 10
+    case thirtySeconds = 30
+    case never = 0
+
+    var seconds: TimeInterval? {
+        switch self {
+        case .never: nil
+        case .fiveSeconds, .tenSeconds, .thirtySeconds: TimeInterval(rawValue)
+        }
+    }
+
+    var title: String {
+        switch self {
+        case .never: "Never"
+        case .fiveSeconds, .tenSeconds, .thirtySeconds: "After \(rawValue) Seconds"
+        }
+    }
+}
+
 @MainActor
 final class Settings {
-    static let rehideDelayChoices: [TimeInterval] = [5, 10, 30]
-
     private enum Key {
         static let rehideDelay = "rehideDelay"
         static let revealOnHover = "revealOnHover"
@@ -17,7 +36,7 @@ final class Settings {
     init(defaults: UserDefaults) {
         self.defaults = defaults
         defaults.register(defaults: [
-            Key.rehideDelay: 10.0,
+            Key.rehideDelay: RehideDelay.tenSeconds.rawValue,
             Key.revealOnHover: false,
             Key.revealOnScroll: true,
             Key.alwaysHiddenEnabled: false,
@@ -25,13 +44,9 @@ final class Settings {
         ])
     }
 
-    /// `nil` means hidden items stay revealed until you hide them again.
-    var rehideDelay: TimeInterval? {
-        get {
-            let value = defaults.double(forKey: Key.rehideDelay)
-            return value > 0 ? value : nil
-        }
-        set { defaults.set(newValue ?? 0, forKey: Key.rehideDelay) }
+    var rehideDelay: RehideDelay {
+        get { RehideDelay(rawValue: defaults.integer(forKey: Key.rehideDelay)) ?? .tenSeconds }
+        set { defaults.set(newValue.rawValue, forKey: Key.rehideDelay) }
     }
 
     var revealOnHover: Bool {
