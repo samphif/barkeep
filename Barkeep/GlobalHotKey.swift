@@ -39,7 +39,14 @@ final class GlobalHotKey {
         )
         guard registerStatus == noErr else {
             RemoveEventHandler(handlerRef)
+            handlerRef = nil
             return nil
         }
+    }
+
+    /// The Carbon handler holds an unretained pointer to `self`, so it must go before `self` does.
+    isolated deinit {
+        if let hotKeyRef { UnregisterEventHotKey(hotKeyRef) }
+        if let handlerRef { RemoveEventHandler(handlerRef) }
     }
 }

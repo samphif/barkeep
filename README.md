@@ -15,7 +15,7 @@ No Screen Recording or Accessibility permission. No private APIs. About 500 line
    - Scrolling in the menu bar
    - Pressing `⌃⌥⌘B`
    - Hovering over the chevron (off by default)
-4. They hide again after 10 seconds, or once your pointer leaves the menu bar if it's still there.
+4. They hide again 10 seconds after you stop using the menu bar. Barkeep waits while your pointer is in the menu bar or any menu is open.
 
 Right-click the chevron for settings: the auto-hide delay, hover and scroll behavior, the always-hidden section, and Launch at Login.
 
@@ -40,9 +40,15 @@ Barkeep owns three status items:
 [ always-hidden · ] [ hidden │ ] [ chevron ]   Wi-Fi  Control Center  Clock
 ```
 
-To collapse, Barkeep sets the hidden divider's width to 10,000 points. That pushes every icon to its left off the edge of the screen. To expand, it shrinks the divider back to 12 points. The always-hidden divider stays 10,000 points wide unless you `⌥`-click. Hidden Bar, Dozer, and early Ice all used the same trick.
+To collapse, Barkeep widens the hidden divider to 45% of your narrowest display's width. That leaves no room for the icons to its left. On macOS 27 they move into the system's `«` overflow menu at the left end of the menu bar. To expand, Barkeep shrinks the divider back to 12 points. The always-hidden divider stays wide unless you `⌥`-click. Hidden Bar, Dozer, and early Ice all used the same trick with a fixed 10,000-point width.
 
-The hotkey is a Carbon hot key, and scroll-to-show uses a global mouse monitor. Neither needs Accessibility permission.
+The hotkey is a Carbon hot key, and scroll-to-show uses a global mouse monitor. Neither needs Accessibility permission. Each trackpad swipe toggles at most once, and momentum scrolling is ignored. Barkeep detects open menus by reading window levels, which doesn't need Screen Recording.
+
+To see what Barkeep is doing:
+
+```bash
+log stream --level info --predicate 'subsystem == "com.samuelphifer.Barkeep"'
+```
 
 ## What Bartender does, and what Barkeep keeps
 
@@ -53,7 +59,7 @@ Sources: the [Bartender 6](https://www.macbartender.com/Bartender6/) and [Barten
 | Hide menu bar items, show on click | Yes | The core feature |
 | Show on hover / scroll / swipe | Hover over the chevron, scroll anywhere in the menu bar | Bartender's hover works over any empty space in the menu bar. Detecting that needs screen reading. |
 | Hotkey | `⌃⌥⌘B` | Fixed for now |
-| Auto-rehide | 5 / 10 / 30 seconds or never | Waits while the pointer is in the menu bar |
+| Auto-rehide | 5 / 10 / 30 seconds or never | Counts down after you stop using the menu bar or an open menu |
 | Always-hidden items | Optional dotted divider | |
 | Launch at login | Yes | `SMAppService` |
 | Bartender Bar (hidden items in a panel below the menu bar) | No | Needs Screen Recording to draw copies of other apps' icons, plus Accessibility to click them. On Tahoe it also moves your mouse, which the support page lists as a known problem. |
@@ -63,6 +69,9 @@ Sources: the [Bartender 6](https://www.macbartender.com/Bartender6/) and [Barten
 | Groups, widgets, spacers, styling, tints, spacing | No | Cosmetic |
 | Item indexing (keep order after reboot) | Built in | macOS remembers the order you `⌘`-drag into |
 
-## macOS 27 note
+## macOS 27 notes
 
-On macOS 27, `MenuBarAgent` draws the menu bar. Apps' status item windows now report placeholder frames: they overlap, and they don't move when an item's width changes. Barkeep's "is the divider left of the chevron?" check only blocks collapsing when the frames look real. If the chevron ever ends up hidden, press `⌃⌥⌘B` or scroll in the menu bar to bring everything back, then `⌘`-drag the divider to the left of the chevron.
+- **Half-width limit:** macOS 27 throws away any status item wider than half the display, instead of shrinking it. A 10,000-point divider just disappears and hides nothing. That's why Barkeep caps the divider at 45% of the narrowest attached display.
+- **Large external displays:** because the cap follows your narrowest screen, a much wider display may still have room for some hidden icons. If a few show up there, move fewer icons left of the divider, or disconnect the smallest display.
+- **Overflow instead of off screen:** hidden icons land in the system `«` overflow menu, so you can still reach them there without revealing.
+- **Placeholder positions:** `MenuBarAgent` draws the menu bar, and apps' status item windows report placeholder frames. They overlap and don't move when an item's width changes. Barkeep's "is the divider left of the chevron?" check only blocks collapsing when the frames look real. If the chevron ever ends up hidden, press `⌃⌥⌘B` or scroll in the menu bar to bring everything back, then `⌘`-drag the divider to the left of the chevron.

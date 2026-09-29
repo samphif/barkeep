@@ -58,8 +58,8 @@ enum BarLayout {
             && point.y >= screenFrame.maxY - menuBarHeight
     }
 
-    static func shouldRehide(now: Date, revealedAt: Date, delay: TimeInterval?, mouseInMenuBar: Bool) -> Bool {
-        guard let delay, !mouseInMenuBar else { return false }
+    static func shouldRehide(now: Date, revealedAt: Date, delay: TimeInterval?, menuBarInUse: Bool) -> Bool {
+        guard let delay, !menuBarInUse else { return false }
         return now.timeIntervalSince(revealedAt) >= delay
     }
 }

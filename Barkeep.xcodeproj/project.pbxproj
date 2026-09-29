@@ -10,10 +10,12 @@
 		112C3CE6B3DB9E4C91DB2EAF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F38AA0D5A0313126D745C51 /* AppDelegate.swift */; };
 		116F5643DE814AFE32D5A646 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12AFA0CD3542340517C28A37 /* main.swift */; };
 		223EA15F9802AD4AC755353D /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF874A6FCB0680AD414E6E1A /* Settings.swift */; };
+		2F09D52A5E30DFE693A18C00 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 933BEB12593952ABB8E5769C /* Log.swift */; };
 		543D3ED4927884E6D165979B /* BarLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF93C02CF1A1D25B2CF4947A /* BarLayout.swift */; };
 		67A76CCCA64967384F9F07F6 /* MenuBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D676FB3D184012085DC4EA6 /* MenuBarController.swift */; };
 		EA2D0C6DBE6D1D4C57705F2D /* BarLayoutTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C6C97F0058326B1A031CF7 /* BarLayoutTests.swift */; };
 		F2BE4C5D9BF060041CD0260E /* StatusImages.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECADAE623426C4A518D1E251 /* StatusImages.swift */; };
+		F35471056403EEC74FC69218 /* ScrollGesture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3533C4D77752FE85786F761E /* ScrollGesture.swift */; };
 		F8CA0596F3903D7ED61D2DD1 /* GlobalHotKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3DA2BB8B1EF14B2DE6FA51A /* GlobalHotKey.swift */; };
 /* End PBXBuildFile section */
 
@@ -30,9 +32,11 @@
 /* Begin PBXFileReference section */
 		12AFA0CD3542340517C28A37 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		2D676FB3D184012085DC4EA6 /* MenuBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarController.swift; sourceTree = "<group>"; };
+		3533C4D77752FE85786F761E /* ScrollGesture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollGesture.swift; sourceTree = "<group>"; };
 		45C6C97F0058326B1A031CF7 /* BarLayoutTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarLayoutTests.swift; sourceTree = "<group>"; };
 		550861B24DBABFAA5C5AE258 /* BarkeepTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BarkeepTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		601F0503F3366DE44BF30B40 /* Barkeep.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Barkeep.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		933BEB12593952ABB8E5769C /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 		9F38AA0D5A0313126D745C51 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A3DA2BB8B1EF14B2DE6FA51A /* GlobalHotKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalHotKey.swift; sourceTree = "<group>"; };
 		AF874A6FCB0680AD414E6E1A /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
@@ -73,8 +77,10 @@
 				9F38AA0D5A0313126D745C51 /* AppDelegate.swift */,
 				AF93C02CF1A1D25B2CF4947A /* BarLayout.swift */,
 				A3DA2BB8B1EF14B2DE6FA51A /* GlobalHotKey.swift */,
+				933BEB12593952ABB8E5769C /* Log.swift */,
 				12AFA0CD3542340517C28A37 /* main.swift */,
 				2D676FB3D184012085DC4EA6 /* MenuBarController.swift */,
+				3533C4D77752FE85786F761E /* ScrollGesture.swift */,
 				AF874A6FCB0680AD414E6E1A /* Settings.swift */,
 				ECADAE623426C4A518D1E251 /* StatusImages.swift */,
 			);
@@ -165,7 +171,9 @@
 				112C3CE6B3DB9E4C91DB2EAF /* AppDelegate.swift in Sources */,
 				543D3ED4927884E6D165979B /* BarLayout.swift in Sources */,
 				F8CA0596F3903D7ED61D2DD1 /* GlobalHotKey.swift in Sources */,
+				2F09D52A5E30DFE693A18C00 /* Log.swift in Sources */,
 				67A76CCCA64967384F9F07F6 /* MenuBarController.swift in Sources */,
+				F35471056403EEC74FC69218 /* ScrollGesture.swift in Sources */,
 				223EA15F9802AD4AC755353D /* Settings.swift in Sources */,
 				F2BE4C5D9BF060041CD0260E /* StatusImages.swift in Sources */,
 				116F5643DE814AFE32D5A646 /* main.swift in Sources */,

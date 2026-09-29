@@ -5,8 +5,6 @@ import ServiceManagement
 @MainActor
 final class MenuBarController: NSObject {
     private static let hotKeyDescription = "⌃⌥⌘B"
-    private static let scrollThreshold: CGFloat = 3
-    private static let scrollCooldown: TimeInterval = 0.6
 
     private let settings: Settings
     // Items created first sit furthest right, so this order yields: [always-hidden] [hidden] [chevron].
@@ -18,7 +16,8 @@ final class MenuBarController: NSObject {
     private var revealedAt = Date()
     private var rehideTask: Task<Void, Never>?
     private var scrollMonitor: Any?
-    private var lastScrollToggle = Date.distantPast
+    private var scrollGesture = ScrollGesture()
+    private var screenObserver: NSObjectProtocol?
     private var hotKey: GlobalHotKey?
 
     init(settings: Settings) {
@@ -31,7 +30,7 @@ final class MenuBarController: NSObject {
 
         configureItems()
         configureScrollMonitor()
-        NotificationCenter.default.addObserver(
+        screenObserver = NotificationCenter.default.addObserver(
             forName: NSApplication.didChangeScreenParametersNotification,
             object: nil,
             queue: .main
@@ -43,6 +42,9 @@ final class MenuBarController: NSObject {
         }
         hotKey = GlobalHotKey(keyCode: kVK_ANSI_B, modifiers: controlKey | optionKey | cmdKey) { [weak self] in
             self?.toggle()
+        }
+        if hotKey == nil {
+            Log.menuBar.error("Hotkey \(Self.hotKeyDescription, privacy: .public) is already registered by another app")
         }
         apply(.expanded)
 
@@ -82,8 +84,12 @@ final class MenuBarController: NSObject {
 
     private func configureScrollMonitor() {
         scrollMonitor = NSEvent.addGlobalMonitorForEvents(matching: .scrollWheel) { [weak self] event in
-            let delta = event.scrollingDeltaY
-            MainActor.assumeIsolated { self?.handleScroll(delta: delta) }
+            let deltaY = event.scrollingDeltaY
+            let phase = event.phase
+            let momentumPhase = event.momentumPhase
+            MainActor.assumeIsolated {
+                self?.handleScroll(deltaY: deltaY, phase: phase, momentumPhase: momentumPhase)
+            }
         }
     }
 
@@ -114,6 +120,7 @@ final class MenuBarController: NSObject {
 
     private func collapse(explainIfBlocked: Bool) {
         guard layoutIsOrdered else {
+            Log.menuBar.notice("Collapse blocked: divider is not left of the chevron")
             if explainIfBlocked { showLayoutHelp() }
             return
         }
@@ -128,8 +135,13 @@ final class MenuBarController: NSObject {
         hiddenDivider.length = lengths.hidden
         alwaysHiddenDivider.length = lengths.alwaysHidden
         toggleItem.button?.image = newState == .collapsed ? StatusImages.showHidden : StatusImages.hideItems
+        Log.menuBar.info(
+            "State \(String(describing: newState), privacy: .public): hidden=\(lengths.hidden) alwaysHidden=\(lengths.alwaysHidden)"
+        )
     }
 
+    /// Counts down from the last moment the menu bar was in use, so a revealed item's
+    /// menu never collapses out from under the pointer.
     private func scheduleRehide() {
         rehideTask?.cancel()
         guard let delay = settings.rehideDelay else { return }
@@ -137,18 +149,24 @@ final class MenuBarController: NSObject {
             try? await Task.sleep(for: .seconds(delay))
             while !Task.isCancelled {
                 guard let self else { return }
-                if BarLayout.shouldRehide(
-                    now: Date(),
-                    revealedAt: self.revealedAt,
-                    delay: delay,
-                    mouseInMenuBar: self.isMouseInMenuBar
-                ) {
+                let inUse = self.isMouseInMenuBar || Self.isAnyMenuOpen
+                if inUse { self.revealedAt = Date() }
+                if BarLayout.shouldRehide(now: Date(), revealedAt: self.revealedAt, delay: delay, menuBarInUse: inUse) {
                     self.collapse(explainIfBlocked: false)
                     return
                 }
                 try? await Task.sleep(for: .seconds(1))
             }
         }
+    }
+
+    /// Open menus from any app sit at the pop-up menu window level. Reading window levels
+    /// and bounds needs no Screen Recording permission.
+    private static var isAnyMenuOpen: Bool {
+        let menuLevel = Int(CGWindowLevelForKey(.popUpMenuWindow))
+        let windows = CGWindowListCopyWindowInfo([.optionOnScreenOnly, .excludeDesktopElements], kCGNullWindowID)
+            as? [[String: Any]] ?? []
+        return windows.contains { ($0[kCGWindowLayer as String] as? Int) == menuLevel }
     }
 
     private var layoutIsOrdered: Bool {
@@ -202,14 +220,11 @@ final class MenuBarController: NSObject {
 
     @objc(mouseExited:) func mouseExited(with event: NSEvent) {}
 
-    private func handleScroll(delta: CGFloat) {
-        guard settings.revealOnScroll,
-              abs(delta) >= Self.scrollThreshold,
-              isMouseInMenuBar,
-              Date().timeIntervalSince(lastScrollToggle) >= Self.scrollCooldown
-        else { return }
-        lastScrollToggle = Date()
-        toggle()
+    private func handleScroll(deltaY: CGFloat, phase: NSEvent.Phase, momentumPhase: NSEvent.Phase) {
+        guard settings.revealOnScroll, isMouseInMenuBar else { return }
+        if scrollGesture.shouldToggle(deltaY: deltaY, phase: phase, momentumPhase: momentumPhase, now: Date()) {
+            toggle()
+        }
     }
 
     // MARK: - Menu
