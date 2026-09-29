@@ -182,10 +182,14 @@ final class MenuBarController: NSObject {
         }
     }
 
-    @objc func mouseEntered(with event: NSEvent) {
+    // NSTrackingArea sends `mouseEntered:` / `mouseExited:` to its owner; a missing or
+    // misnamed selector throws inside AppKit and tears down any open modal alert.
+    @objc(mouseEntered:) func mouseEntered(with event: NSEvent) {
         guard settings.revealOnHover, state == .collapsed else { return }
         reveal(.expanded)
     }
+
+    @objc(mouseExited:) func mouseExited(with event: NSEvent) {}
 
     private func handleScroll(delta: CGFloat) {
         guard settings.revealOnScroll,
@@ -282,7 +286,9 @@ final class MenuBarController: NSObject {
         }
     }
 
-    @objc private func menuShowHelp() { showHelp() }
+    @objc private func menuShowHelp() {
+        Task { self.showHelp() }
+    }
 
     // MARK: - Alerts
 
@@ -315,10 +321,11 @@ final class MenuBarController: NSObject {
     }
 
     private func presentAlert(title: String, message: String) {
-        NSApp.activate(ignoringOtherApps: true)
+        NSApp.activate()
         let alert = NSAlert()
         alert.messageText = title
         alert.informativeText = message
+        alert.window.level = .floating
         alert.runModal()
     }
 }
