@@ -31,7 +31,7 @@ func color(_ hex: UInt32, _ alpha: CGFloat = 1) -> CGColor {
     )
 }
 
-// A menu bar: faded icons on the hidden side, a divider, the chevron, then crisp icons.
+// A menu bar: faded icons on the hidden side, a divider, the bow tie, then crisp icons.
 func drawBar(_ c: CGContext) {
     let bar = CGRect(x: 172, y: 196, width: 680, height: 92)
     c.setFillColor(color(0xFFFFFF, 0.22))
@@ -46,16 +46,21 @@ func drawBar(_ c: CGContext) {
     c.setFillColor(color(0xFFFFFF, 0.9))
     c.fill(CGRect(x: 443, y: midY - 28, width: 8, height: 56))
 
-    c.setStrokeColor(color(0xFFFFFF))
-    c.setLineWidth(14)
-    c.setLineCap(.round)
-    c.setLineJoin(.round)
-    c.move(to: CGPoint(x: 520, y: midY - 24))
-    c.addLine(to: CGPoint(x: 496, y: midY))
-    c.addLine(to: CGPoint(x: 520, y: midY + 24))
-    c.strokePath()
-
     c.setFillColor(color(0xFFFFFF))
+    c.setStrokeColor(color(0xFFFFFF))
+    c.setLineWidth(6)
+    c.setLineJoin(.round)
+    for (inner, outer) in [(CGFloat(508), CGFloat(482)), (CGFloat(532), CGFloat(558))] {
+        c.move(to: CGPoint(x: inner, y: midY - 8))
+        c.addLine(to: CGPoint(x: outer, y: midY - 22))
+        c.addLine(to: CGPoint(x: outer, y: midY + 22))
+        c.addLine(to: CGPoint(x: inner, y: midY + 8))
+        c.closePath()
+    }
+    c.drawPath(using: .fillStroke)
+    c.addPath(CGPath(roundedRect: CGRect(x: 507, y: midY - 11, width: 26, height: 22), cornerWidth: 7, cornerHeight: 7, transform: nil))
+    c.fillPath()
+
     for i in 0..<3 {
         c.fillEllipse(in: CGRect(x: 588 + CGFloat(i) * 76, y: midY - 20, width: 40, height: 40))
     }

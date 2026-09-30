@@ -16,7 +16,7 @@ enum StatusClick {
 }
 
 /// Barkeep's three menu bar items. Items created first sit furthest right, so this order
-/// yields: [always-hidden ┊] [hidden │] [chevron].
+/// yields: [always-hidden ┊] [hidden │] [bow tie].
 @MainActor
 final class StatusItems: NSObject {
     var onClick: (StatusClick) -> Void = { _ in }

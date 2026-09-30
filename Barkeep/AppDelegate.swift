@@ -19,7 +19,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
     }
 
-    /// Two copies would each add a chevron and divider, fighting over the same icons.
+    /// Two copies would each add a bow tie and divider, fighting over the same icons.
     private static var isAnotherInstanceRunning: Bool {
         guard let bundleID = Bundle.main.bundleIdentifier else { return false }
         let currentPID = ProcessInfo.processInfo.processIdentifier

@@ -74,7 +74,7 @@ struct MenuBarSections: Equatable {
 }
 
 /// Barkeep's dividers among its own status items: by accessibility identifier, or when
-/// macOS doesn't pass that through, by shape. The chevron is the widest, and the
+/// macOS doesn't pass that through, by shape. The bow tie is the widest, and the
 /// always-hidden divider sits left of the hidden one.
 struct Dividers: Equatable {
     let hidden: CGRect

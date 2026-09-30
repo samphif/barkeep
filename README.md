@@ -6,20 +6,20 @@ No Screen Recording permission. Accessibility access is optional: it lets Barkee
 
 ## Use it
 
-1. Launch Barkeep. A chevron and a thin divider (`│`) appear in the menu bar. When macOS asks, allow Accessibility access (or later: right-click the chevron, then **Allow Accessibility Access…**).
+1. Launch Barkeep. A bow tie and a thin divider (`│`) appear in the menu bar. When macOS asks, allow Accessibility access (or later: right-click the bow tie, then **Allow Accessibility Access…**).
 2. Hold `⌘` and drag icons:
    - **Right of the divider:** always visible (Wi-Fi, Control Center, Cursor, one or two more).
    - **Left of the divider:** hidden.
 3. Show hidden icons by any of:
-   - Clicking the chevron
+   - Clicking the bow tie
    - Scrolling in the menu bar
    - Pressing `⌃⌥⌘B`
-   - Hovering over the chevron (off by default)
+   - Hovering over the bow tie (off by default)
 4. They hide again 10 seconds after you stop using the menu bar. Barkeep waits while your pointer is in the menu bar or any menu is open.
 
-Right-click the chevron for settings: the auto-hide delay, hover and scroll behavior, the always-hidden section, and Launch at Login.
+Right-click the bow tie for settings: the auto-hide delay, hover and scroll behavior, the always-hidden section, and Launch at Login.
 
-**Always-hidden section (optional):** turning this on adds a dotted divider. Icons left of it stay hidden even after you click the chevron. `⌥`-click the chevron to show them.
+**Always-hidden section (optional):** turning this on adds a dotted divider. Icons left of it stay hidden even after you click the bow tie. `⌥`-click the bow tie to show them.
 
 ## Build
 
@@ -39,7 +39,7 @@ The app icon is an Icon Composer file, `Barkeep/AppIcon.icon`. `swift scripts/ma
 Barkeep owns three status items:
 
 ```
-[ always-hidden · ] [ hidden │ ] [ chevron ]   Wi-Fi  Control Center  Clock
+[ always-hidden · ] [ hidden │ ] [ bow tie ]   Wi-Fi  Control Center  Clock
 ```
 
 **With Accessibility access (macOS 27):** Barkeep reads where every app's icons sit relative to its dividers, then asks macOS to show only the apps on the visible side. It uses the menu bar allow-list behind macOS's exam lockdown mode, from the private `MenuBarClientCore` framework, as [Hidden Bar](https://github.com/dwarvesf/hidden) does. The dividers are thin lines while expanded, so you can `⌘`-drag icons past them, and disappear while collapsed. Hiding doesn't depend on display width. macOS lifts the restriction if Barkeep quits, and Barkeep shows everything if it can't find its divider or macOS refuses the request.
@@ -61,7 +61,7 @@ Sources: the [Bartender 6](https://www.macbartender.com/Bartender6/) and [Barten
 | Bartender feature | Barkeep | Notes |
 | --- | --- | --- |
 | Hide menu bar items, show on click | Yes | The core feature |
-| Show on hover / scroll / swipe | Hover over the chevron, scroll anywhere in the menu bar | Bartender's hover works over any empty space in the menu bar. Detecting that needs screen reading. |
+| Show on hover / scroll / swipe | Hover over the bow tie, scroll anywhere in the menu bar | Bartender's hover works over any empty space in the menu bar. Detecting that needs screen reading. |
 | Hotkey | `⌃⌥⌘B` | Fixed for now |
 | Auto-rehide | 5 / 10 / 30 seconds or never | Counts down after you stop using the menu bar or an open menu |
 | Always-hidden items | Optional dotted divider | |
@@ -79,4 +79,4 @@ Sources: the [Bartender 6](https://www.macbartender.com/Bartender6/) and [Barten
 - **Large external displays:** without Accessibility access, the cap follows your narrowest screen, so a much wider display still has room for hidden icons. Native hiding has no such limit.
 - **Per app, not per icon:** native hiding works by app. An app with icons on both sides of the divider stays visible. macOS's own items (clock, Wi-Fi, Control Center) always stay visible.
 - **New apps while collapsed:** an app launched while icons are hidden stays hidden until you next reveal, just as a new icon lands left of the divider.
-- **Placeholder positions:** `MenuBarAgent` draws the menu bar, and apps' status item windows report overlapping placeholder frames. Barkeep reads real positions through Accessibility instead. If the chevron ever ends up hidden, press `⌃⌥⌘B` or scroll in the menu bar to bring everything back, then `⌘`-drag the divider to the left of the chevron.
+- **Placeholder positions:** `MenuBarAgent` draws the menu bar, and apps' status item windows report overlapping placeholder frames. Barkeep reads real positions through Accessibility instead. If the bow tie ever ends up hidden, press `⌃⌥⌘B` or scroll in the menu bar to bring everything back, then `⌘`-drag the divider to the left of the bow tie.

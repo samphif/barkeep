@@ -10,7 +10,7 @@ struct SettingsMenu {
     }
 
     private static let toggles: [(title: String, keyPath: ReferenceWritableKeyPath<Settings, Bool>)] = [
-        ("Show on Hover Over Chevron", \.revealOnHover),
+        ("Show on Hover Over Bow Tie", \.revealOnHover),
         ("Show on Scroll in Menu Bar", \.revealOnScroll),
         ("Always-Hidden Section", \.alwaysHiddenEnabled),
     ]
