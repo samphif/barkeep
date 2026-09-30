@@ -6,6 +6,7 @@ import AppKit
 @MainActor
 final class NativeHiding {
     private var restriction: VisibilityRestriction?
+    private var shown: Set<MenuBarSection>?
     private var sections: MenuBarSections?
     private var hiddenOwners: Set<String> = []
     /// Bumped on every request, so a slower, older one never overrides a newer one.
@@ -13,7 +14,11 @@ final class NativeHiding {
 
     static var isUsable: Bool { NativeVisibility.isAvailable && MenuBarInventory.isTrusted }
 
-    func apply(_ state: RevealState, alwaysHiddenEnabled: Bool) {
+    /// Only the visible section is showing, so the dividers have nothing to separate.
+    var isCollapsed: Bool { restriction != nil && shown == [.visible] }
+
+    /// `onApplied` runs once the new restriction is in place.
+    func apply(_ state: RevealState, alwaysHiddenEnabled: Bool, onApplied: @escaping @MainActor () -> Void) {
         let everything = Set(MenuBarSection.allCases)
         let shown: Set<MenuBarSection> = switch state {
         case .collapsed: [.visible]
@@ -23,17 +28,21 @@ final class NativeHiding {
         guard shown != everything else { return lift() }
         generation += 1
         let generation = generation
+        // Display changes don't affect native hiding, and re-reading now would find
+        // the dividers hidden.
+        guard restriction == nil || shown != self.shown else { return }
 
         Task {
             let snapshot = await MenuBarInventory.snapshot()
             guard generation == self.generation else { return }
             Log.menuBar.debug("Own items \(snapshot.own.map { "\($0.identifier ?? "?") \($0.frame)" }, privacy: .public)")
             let ownBundleID = Bundle.main.bundleIdentifier
-            guard let fresh = MenuBarSections(snapshot: snapshot, screens: NSScreen.screens.map(\.frame), ownerToSkip: ownBundleID) else {
+            let fresh = MenuBarSections(snapshot: snapshot, screens: NSScreen.screens.map(\.frame), ownerToSkip: ownBundleID)
+            // A divider that's just reappearing may not be laid out yet; the last read stands in.
+            guard let sections = fresh.map({ self.sections?.updated(with: $0, keeping: hiddenOwners) ?? $0 }) ?? self.sections else {
                 Log.menuBar.error("Can't find Barkeep's divider in the menu bar; showing everything")
                 return lift()
             }
-            let sections = self.sections?.updated(with: fresh, keeping: hiddenOwners) ?? fresh
             let allowed = sections.owners(in: shown)
             do {
                 let restriction = try await NativeVisibility.restrict(allowing: [ownBundleID].compactMap(\.self) + allowed)
@@ -41,9 +50,11 @@ final class NativeHiding {
                 // The new restriction is already on, so dropping the old one flashes nothing.
                 self.restriction?.lift()
                 self.restriction = restriction
+                self.shown = shown
                 self.sections = sections
-                hiddenOwners = Set(sections.owners(in: Set(MenuBarSection.allCases).subtracting(shown)))
+                hiddenOwners = Set(sections.owners(in: everything.subtracting(shown)))
                 Log.menuBar.info("Hiding \(self.hiddenOwners.sorted(), privacy: .public)")
+                onApplied()
             } catch {
                 Log.menuBar.error("Native hiding failed: \(error.localizedDescription, privacy: .public)")
                 if generation == self.generation { lift() }
@@ -55,6 +66,7 @@ final class NativeHiding {
         generation += 1
         restriction?.lift()
         restriction = nil
+        shown = nil
         hiddenOwners = []
     }
 }

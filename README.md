@@ -42,7 +42,7 @@ Barkeep owns three status items:
 [ always-hidden · ] [ hidden │ ] [ chevron ]   Wi-Fi  Control Center  Clock
 ```
 
-**With Accessibility access (macOS 27):** Barkeep reads where every app's icons sit relative to its dividers, then asks macOS to show only the apps on the visible side. It uses the menu bar allow-list behind macOS's exam lockdown mode, from the private `MenuBarClientCore` framework, as [Hidden Bar](https://github.com/dwarvesf/hidden) does. The dividers stay 12 points wide, and hiding doesn't depend on display width. macOS lifts the restriction if Barkeep quits, and Barkeep shows everything if it can't find its divider or macOS refuses the request.
+**With Accessibility access (macOS 27):** Barkeep reads where every app's icons sit relative to its dividers, then asks macOS to show only the apps on the visible side. It uses the menu bar allow-list behind macOS's exam lockdown mode, from the private `MenuBarClientCore` framework, as [Hidden Bar](https://github.com/dwarvesf/hidden) does. The dividers are thin lines while expanded, so you can `⌘`-drag icons past them, and disappear while collapsed. Hiding doesn't depend on display width. macOS lifts the restriction if Barkeep quits, and Barkeep shows everything if it can't find its divider or macOS refuses the request.
 
 **Without it:** to collapse, Barkeep widens the hidden divider to 45% of your narrowest display's width. That leaves no room for the icons to its left, so they move into the system's `«` overflow menu. To expand, Barkeep shrinks the divider back to 12 points. The always-hidden divider stays wide unless you `⌥`-click. Hidden Bar, Dozer, and early Ice all used the same trick with a fixed 10,000-point width.
 

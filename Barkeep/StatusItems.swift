@@ -1,5 +1,14 @@
 import AppKit
 
+enum DividerStyle {
+    /// Stretched to push the icons on their left off the bar.
+    case stretched
+    /// A thin line to ⌘-drag icons past; native hiding does the hiding.
+    case narrow
+    /// Nothing to separate while native hiding shows only the visible section.
+    case hidden
+}
+
 enum StatusClick {
     case toggle
     case showAll
@@ -47,13 +56,16 @@ final class StatusItems: NSObject {
         set { alwaysHiddenDivider.isVisible = newValue }
     }
 
-    /// Native hiding leaves the dividers narrow; otherwise a stretched divider pushes
-    /// the icons to its left off the bar.
-    func show(_ state: RevealState, stretchDividers: Bool) {
-        let collapsedLength = stretchDividers
-            ? BarLayout.collapsedLength(screenWidths: NSScreen.screens.map(\.frame.width))
-            : BarLayout.dividerLength
-        let lengths = state.dividerLengths(collapsed: collapsedLength)
+    func show(_ state: RevealState, dividers style: DividerStyle) {
+        let lengths: DividerLengths = switch style {
+        case .stretched:
+            state.dividerLengths(collapsed: BarLayout.collapsedLength(screenWidths: NSScreen.screens.map(\.frame.width)))
+        case .narrow:
+            state.dividerLengths(collapsed: BarLayout.dividerLength)
+        case .hidden:
+            // Zero length rather than isVisible = false, which makes macOS forget the position.
+            DividerLengths(hidden: 0, alwaysHidden: 0)
+        }
         hiddenDivider.length = lengths.hidden
         alwaysHiddenDivider.length = lengths.alwaysHidden
         toggleItem.button?.image = state == .collapsed ? StatusImages.showHidden : StatusImages.hideItems

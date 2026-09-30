@@ -63,13 +63,25 @@ final class MenuBarController {
     /// Native hiding when macOS offers it and Barkeep has Accessibility access; otherwise
     /// the stretched divider, which can't cover displays much wider than the narrowest.
     private func relayout() {
-        let native = NativeHiding.isUsable
-        items.show(state, stretchDividers: !native)
-        if native {
-            nativeHiding.apply(state, alwaysHiddenEnabled: settings.alwaysHiddenEnabled)
+        if NativeHiding.isUsable {
+            nativeHiding.apply(state, alwaysHiddenEnabled: settings.alwaysHiddenEnabled) { [weak self] in self?.showItems() }
         } else {
             nativeHiding.lift()
         }
+        showItems()
+    }
+
+    /// The dividers disappear only once native hiding is in effect, since it reads their
+    /// position first.
+    private func showItems() {
+        let style: DividerStyle = if !NativeHiding.isUsable {
+            .stretched
+        } else if state == .collapsed && nativeHiding.isCollapsed {
+            .hidden
+        } else {
+            .narrow
+        }
+        items.show(state, dividers: style)
     }
 
     // MARK: - Triggers
