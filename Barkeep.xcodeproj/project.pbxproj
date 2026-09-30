@@ -18,15 +18,20 @@
 		543D3ED4927884E6D165979B /* BarLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF93C02CF1A1D25B2CF4947A /* BarLayout.swift */; };
 		67A76CCCA64967384F9F07F6 /* MenuBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D676FB3D184012085DC4EA6 /* MenuBarController.swift */; };
 		6F28D7C651F99328D41D6C4E /* SystemEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9AA1A0F780AC86DD170E21C /* SystemEvents.swift */; };
+		768E585CBD46AE832E51F5F7 /* NativeVisibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D53B078370A953488B563F8 /* NativeVisibility.swift */; };
+		7B57ACEAE9585ED29FDC4D8D /* MenuBarInventory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A238FF26078E25B8E353C520 /* MenuBarInventory.swift */; };
 		7D0B4088EBC83E579567E6D7 /* LaunchAtLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E566C330E79EA07931E9B0 /* LaunchAtLogin.swift */; };
 		957F3F7466C31B196C1FA2FE /* RehideTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6788398ADE179E2630182F /* RehideTests.swift */; };
 		96C93D3434DDFA351AE72698 /* SettingsMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2937AE3EC0DDF1460CB0625 /* SettingsMenu.swift */; };
 		CAE3F8B69CAE6FFDBE58DA9A /* ScrollGestureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DA29A94C2F409516E9C8111 /* ScrollGestureTests.swift */; };
+		CFB3E9167D9E0C6C21A41248 /* MenuBarSections.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23FE2D44CD94B92D7F74553B /* MenuBarSections.swift */; };
 		DD833FF79BE3857CC27FF4F4 /* MenuBarActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E86039257FBBD7896365AA7 /* MenuBarActivity.swift */; };
 		DEBAE321C487F8A8195ABB21 /* StatusItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 850E78ACD888C587EDFC8372 /* StatusItems.swift */; };
+		F283454A7FD502B3DCEBDE00 /* MenuBarSectionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33A8DE3191C5177826FCDF88 /* MenuBarSectionsTests.swift */; };
 		F2BE4C5D9BF060041CD0260E /* StatusImages.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECADAE623426C4A518D1E251 /* StatusImages.swift */; };
 		F35471056403EEC74FC69218 /* ScrollGesture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3533C4D77752FE85786F761E /* ScrollGesture.swift */; };
 		F8CA0596F3903D7ED61D2DD1 /* GlobalHotKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3DA2BB8B1EF14B2DE6FA51A /* GlobalHotKey.swift */; };
+		FB287013AD83087C685A8411 /* NativeHiding.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5624531E4832A9464CAAD32 /* NativeHiding.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,18 +47,23 @@
 /* Begin PBXFileReference section */
 		12AFA0CD3542340517C28A37 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		1E86039257FBBD7896365AA7 /* MenuBarActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarActivity.swift; sourceTree = "<group>"; };
+		23FE2D44CD94B92D7F74553B /* MenuBarSections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarSections.swift; sourceTree = "<group>"; };
 		2D676FB3D184012085DC4EA6 /* MenuBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarController.swift; sourceTree = "<group>"; };
+		33A8DE3191C5177826FCDF88 /* MenuBarSectionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarSectionsTests.swift; sourceTree = "<group>"; };
 		3533C4D77752FE85786F761E /* ScrollGesture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollGesture.swift; sourceTree = "<group>"; };
 		411A8B2F057202A17472E174 /* RehideTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RehideTimer.swift; sourceTree = "<group>"; };
 		45E566C330E79EA07931E9B0 /* LaunchAtLogin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchAtLogin.swift; sourceTree = "<group>"; };
 		4CAC4C50B71A824231452B8C /* RevealStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RevealStateTests.swift; sourceTree = "<group>"; };
 		550861B24DBABFAA5C5AE258 /* BarkeepTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BarkeepTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		601F0503F3366DE44BF30B40 /* Barkeep.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Barkeep.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7D53B078370A953488B563F8 /* NativeVisibility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeVisibility.swift; sourceTree = "<group>"; };
 		7DA29A94C2F409516E9C8111 /* ScrollGestureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollGestureTests.swift; sourceTree = "<group>"; };
 		850E78ACD888C587EDFC8372 /* StatusItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusItems.swift; sourceTree = "<group>"; };
 		933BEB12593952ABB8E5769C /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 		9F38AA0D5A0313126D745C51 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		A238FF26078E25B8E353C520 /* MenuBarInventory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarInventory.swift; sourceTree = "<group>"; };
 		A3DA2BB8B1EF14B2DE6FA51A /* GlobalHotKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalHotKey.swift; sourceTree = "<group>"; };
+		A5624531E4832A9464CAAD32 /* NativeHiding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeHiding.swift; sourceTree = "<group>"; };
 		AF874A6FCB0680AD414E6E1A /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		AF93C02CF1A1D25B2CF4947A /* BarLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarLayout.swift; sourceTree = "<group>"; };
 		B1A82C0F440ECBFE83E600AC /* RevealState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RevealState.swift; sourceTree = "<group>"; };
@@ -68,6 +78,7 @@
 		29AB0431D23CA5CF9FB8F87B /* BarkeepTests */ = {
 			isa = PBXGroup;
 			children = (
+				33A8DE3191C5177826FCDF88 /* MenuBarSectionsTests.swift */,
 				BB6788398ADE179E2630182F /* RehideTests.swift */,
 				4CAC4C50B71A824231452B8C /* RevealStateTests.swift */,
 				7DA29A94C2F409516E9C8111 /* ScrollGestureTests.swift */,
@@ -105,6 +116,10 @@
 				12AFA0CD3542340517C28A37 /* main.swift */,
 				1E86039257FBBD7896365AA7 /* MenuBarActivity.swift */,
 				2D676FB3D184012085DC4EA6 /* MenuBarController.swift */,
+				A238FF26078E25B8E353C520 /* MenuBarInventory.swift */,
+				23FE2D44CD94B92D7F74553B /* MenuBarSections.swift */,
+				A5624531E4832A9464CAAD32 /* NativeHiding.swift */,
+				7D53B078370A953488B563F8 /* NativeVisibility.swift */,
 				411A8B2F057202A17472E174 /* RehideTimer.swift */,
 				B1A82C0F440ECBFE83E600AC /* RevealState.swift */,
 				3533C4D77752FE85786F761E /* ScrollGesture.swift */,
@@ -206,6 +221,10 @@
 				2F09D52A5E30DFE693A18C00 /* Log.swift in Sources */,
 				DD833FF79BE3857CC27FF4F4 /* MenuBarActivity.swift in Sources */,
 				67A76CCCA64967384F9F07F6 /* MenuBarController.swift in Sources */,
+				7B57ACEAE9585ED29FDC4D8D /* MenuBarInventory.swift in Sources */,
+				CFB3E9167D9E0C6C21A41248 /* MenuBarSections.swift in Sources */,
+				FB287013AD83087C685A8411 /* NativeHiding.swift in Sources */,
+				768E585CBD46AE832E51F5F7 /* NativeVisibility.swift in Sources */,
 				0FECEED314E2755A0D0EFCAF /* RehideTimer.swift in Sources */,
 				2BCD2AFD2D6A75F0A0F74722 /* RevealState.swift in Sources */,
 				F35471056403EEC74FC69218 /* ScrollGesture.swift in Sources */,
@@ -222,6 +241,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F283454A7FD502B3DCEBDE00 /* MenuBarSectionsTests.swift in Sources */,
 				957F3F7466C31B196C1FA2FE /* RehideTests.swift in Sources */,
 				2F04479811E3659BA352F98D /* RevealStateTests.swift in Sources */,
 				CAE3F8B69CAE6FFDBE58DA9A /* ScrollGestureTests.swift in Sources */,

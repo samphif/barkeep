@@ -6,6 +6,7 @@ import AppKit
 final class MenuBarController {
     private let settings: Settings
     private let items = StatusItems()
+    private let nativeHiding = NativeHiding()
     private var state: RevealState = .expanded
     private var scrollGesture = ScrollGesture()
     private var systemEvents: SystemEvents?
@@ -22,13 +23,17 @@ final class MenuBarController {
         items.onHover = { [weak self] in self?.hovered() }
         systemEvents = SystemEvents(
             onScroll: { [weak self] sample in self?.scrolled(sample) },
-            onScreensChanged: { [weak self] in self?.relayout() }
+            onScreensChanged: { [weak self] in self?.relayout() },
+            onAccessibilityChanged: { [weak self] in self?.relayout() }
         )
         hotKey = GlobalHotKey(.toggle) { [weak self] in self?.toggle(showAll: false) }
         if hotKey == nil {
             Log.menuBar.error("Hotkey \(HotKeyCombo.toggle.label, privacy: .public) is already registered by another app")
         }
         LaunchAtLogin.enableOnFirstInstalledLaunch(settings: settings)
+        if NativeVisibility.isAvailable && !MenuBarInventory.isTrusted {
+            MenuBarInventory.requestTrust()
+        }
 
         if settings.hasShownWelcome {
             transition(to: .collapsed)
@@ -55,8 +60,16 @@ final class MenuBarController {
         transition(to: state.toggled(showAll: showAll && settings.alwaysHiddenEnabled))
     }
 
+    /// Native hiding when macOS offers it and Barkeep has Accessibility access; otherwise
+    /// the stretched divider, which can't cover displays much wider than the narrowest.
     private func relayout() {
-        items.show(state)
+        let native = NativeHiding.isUsable
+        items.show(state, stretchDividers: !native)
+        if native {
+            nativeHiding.apply(state, alwaysHiddenEnabled: settings.alwaysHiddenEnabled)
+        } else {
+            nativeHiding.lift()
+        }
     }
 
     // MARK: - Triggers
@@ -87,6 +100,7 @@ final class MenuBarController {
             settings: settings,
             hotKey: .toggle,
             hotKeyAvailable: hotKey != nil,
+            needsAccessibility: NativeVisibility.isAvailable && !MenuBarInventory.isTrusted,
             actions: SettingsMenu.Actions(
                 toggle: { [weak self] in self?.toggle(showAll: false) },
                 showAll: { [weak self] in self?.transition(to: .expandedAll) },

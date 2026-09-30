@@ -19,6 +19,7 @@ struct SettingsMenu {
     let settings: Settings
     let hotKey: HotKeyCombo
     let hotKeyAvailable: Bool
+    let needsAccessibility: Bool
     let actions: Actions
 
     func popUp(from button: NSStatusBarButton) {
@@ -32,6 +33,13 @@ struct SettingsMenu {
             menu.addItem(ClosureMenuItem("Show All Items", action: actions.showAll))
         }
         menu.addItem(.separator())
+
+        if needsAccessibility {
+            menu.addItem(ClosureMenuItem("Allow Accessibility Access to Hide on Any Display…") {
+                MenuBarInventory.openAccessibilitySettings()
+            })
+            menu.addItem(.separator())
+        }
 
         let rehideItem = NSMenuItem(title: "Auto-Hide", action: nil, keyEquivalent: "")
         rehideItem.submenu = NSMenu()

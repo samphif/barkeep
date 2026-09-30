@@ -2,11 +2,11 @@
 
 A tiny, free menu bar tidier for macOS. It does the one Bartender job that matters: keep a few icons visible and tuck the rest away until you want them.
 
-No Screen Recording or Accessibility permission. No private APIs. About 500 lines of Swift.
+No Screen Recording permission. Accessibility access is optional: it lets Barkeep hide icons on displays of any width. About 1,100 lines of Swift.
 
 ## Use it
 
-1. Launch Barkeep. A chevron and a thin divider (`│`) appear in the menu bar.
+1. Launch Barkeep. A chevron and a thin divider (`│`) appear in the menu bar. When macOS asks, allow Accessibility access (or later: right-click the chevron, then **Allow Accessibility Access…**).
 2. Hold `⌘` and drag icons:
    - **Right of the divider:** always visible (Wi-Fi, Control Center, Cursor, one or two more).
    - **Left of the divider:** hidden.
@@ -40,7 +40,9 @@ Barkeep owns three status items:
 [ always-hidden · ] [ hidden │ ] [ chevron ]   Wi-Fi  Control Center  Clock
 ```
 
-To collapse, Barkeep widens the hidden divider to 45% of your narrowest display's width. That leaves no room for the icons to its left. On macOS 27 they move into the system's `«` overflow menu at the left end of the menu bar. To expand, Barkeep shrinks the divider back to 12 points. The always-hidden divider stays wide unless you `⌥`-click. Hidden Bar, Dozer, and early Ice all used the same trick with a fixed 10,000-point width.
+**With Accessibility access (macOS 27):** Barkeep reads where every app's icons sit relative to its dividers, then asks macOS to show only the apps on the visible side. It uses the menu bar allow-list behind macOS's exam lockdown mode, from the private `MenuBarClientCore` framework, as [Hidden Bar](https://github.com/dwarvesf/hidden) does. The dividers stay 12 points wide, and hiding doesn't depend on display width. macOS lifts the restriction if Barkeep quits, and Barkeep shows everything if it can't find its divider or macOS refuses the request.
+
+**Without it:** to collapse, Barkeep widens the hidden divider to 45% of your narrowest display's width. That leaves no room for the icons to its left, so they move into the system's `«` overflow menu. To expand, Barkeep shrinks the divider back to 12 points. The always-hidden divider stays wide unless you `⌥`-click. Hidden Bar, Dozer, and early Ice all used the same trick with a fixed 10,000-point width.
 
 The hotkey is a Carbon hot key, and scroll-to-show uses a global mouse monitor. Neither needs Accessibility permission. Each trackpad swipe toggles at most once, and momentum scrolling is ignored. Barkeep detects open menus by reading window levels, which doesn't need Screen Recording.
 
@@ -71,7 +73,8 @@ Sources: the [Bartender 6](https://www.macbartender.com/Bartender6/) and [Barten
 
 ## macOS 27 notes
 
-- **Half-width limit:** macOS 27 throws away any status item wider than half the display, instead of shrinking it. A 10,000-point divider just disappears and hides nothing. That's why Barkeep caps the divider at 45% of the narrowest attached display.
-- **Large external displays:** because the cap follows your narrowest screen, a much wider display may still have room for some hidden icons. If a few show up there, move fewer icons left of the divider, or disconnect the smallest display.
-- **Overflow instead of off screen:** hidden icons land in the system `«` overflow menu, so you can still reach them there without revealing.
-- **Placeholder positions:** `MenuBarAgent` draws the menu bar, and apps' status item windows report overlapping placeholder frames, so Barkeep can't tell where its own items sit. If the chevron ever ends up hidden, press `⌃⌥⌘B` or scroll in the menu bar to bring everything back, then `⌘`-drag the divider to the left of the chevron.
+- **Half-width limit:** macOS 27 throws away any status item wider than half the display, instead of shrinking it. A 10,000-point divider just disappears and hides nothing. That's why the fallback caps the divider at 45% of the narrowest attached display.
+- **Large external displays:** without Accessibility access, the cap follows your narrowest screen, so a much wider display still has room for hidden icons. Native hiding has no such limit.
+- **Per app, not per icon:** native hiding works by app. An app with icons on both sides of the divider stays visible. macOS's own items (clock, Wi-Fi, Control Center) always stay visible.
+- **New apps while collapsed:** an app launched while icons are hidden stays hidden until you next reveal, just as a new icon lands left of the divider.
+- **Placeholder positions:** `MenuBarAgent` draws the menu bar, and apps' status item windows report overlapping placeholder frames. Barkeep reads real positions through Accessibility instead. If the chevron ever ends up hidden, press `⌃⌥⌘B` or scroll in the menu bar to bring everything back, then `⌘`-drag the divider to the left of the chevron.

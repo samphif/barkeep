@@ -24,13 +24,13 @@ final class StatusItems: NSObject {
         alwaysHiddenDivider = statusBar.statusItem(withLength: BarLayout.dividerLength)
         super.init()
 
-        toggleItem.autosaveName = "BarkeepToggle"
-        hiddenDivider.autosaveName = "BarkeepHiddenDivider"
-        alwaysHiddenDivider.autosaveName = "BarkeepAlwaysHiddenDivider"
         hiddenDivider.button?.image = StatusImages.divider
         alwaysHiddenDivider.button?.image = StatusImages.alwaysHiddenDivider
 
-        for item in [toggleItem, hiddenDivider, alwaysHiddenDivider] {
+        let ids = [StatusItemID.toggle, StatusItemID.hiddenDivider, StatusItemID.alwaysHiddenDivider]
+        for (item, id) in zip([toggleItem, hiddenDivider, alwaysHiddenDivider], ids) {
+            item.autosaveName = id
+            item.button?.setAccessibilityIdentifier(id)
             item.button?.target = self
             item.button?.action = #selector(buttonClicked(_:))
             item.button?.sendAction(on: [.leftMouseUp, .rightMouseUp])
@@ -47,8 +47,12 @@ final class StatusItems: NSObject {
         set { alwaysHiddenDivider.isVisible = newValue }
     }
 
-    func show(_ state: RevealState) {
-        let collapsedLength = BarLayout.collapsedLength(screenWidths: NSScreen.screens.map(\.frame.width))
+    /// Native hiding leaves the dividers narrow; otherwise a stretched divider pushes
+    /// the icons to its left off the bar.
+    func show(_ state: RevealState, stretchDividers: Bool) {
+        let collapsedLength = stretchDividers
+            ? BarLayout.collapsedLength(screenWidths: NSScreen.screens.map(\.frame.width))
+            : BarLayout.dividerLength
         let lengths = state.dividerLengths(collapsed: collapsedLength)
         hiddenDivider.length = lengths.hidden
         alwaysHiddenDivider.length = lengths.alwaysHidden
