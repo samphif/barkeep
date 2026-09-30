@@ -32,6 +32,8 @@ xcodebuild -project Barkeep.xcodeproj -scheme Barkeep -configuration Release -de
 cp -R build/Build/Products/Release/Barkeep.app /Applications/
 ```
 
+The app icon is an Icon Composer file, `Barkeep/AppIcon.icon`. `swift scripts/make-icon.swift` redraws its layers and writes a flat preview to `build/icon-preview.png`.
+
 ## How it works
 
 Barkeep owns three status items:

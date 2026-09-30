@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		08E1C982CDE5F8FA0DA685E0 /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = F958CBEF596599B983544593 /* AppIcon.icon */; };
 		0FECEED314E2755A0D0EFCAF /* RehideTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 411A8B2F057202A17472E174 /* RehideTimer.swift */; };
 		112C3CE6B3DB9E4C91DB2EAF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F38AA0D5A0313126D745C51 /* AppDelegate.swift */; };
 		116F5643DE814AFE32D5A646 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12AFA0CD3542340517C28A37 /* main.swift */; };
@@ -71,6 +72,7 @@
 		BB6788398ADE179E2630182F /* RehideTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RehideTests.swift; sourceTree = "<group>"; };
 		E355BB6D86F5EAC4469C26C8 /* Alerts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alerts.swift; sourceTree = "<group>"; };
 		ECADAE623426C4A518D1E251 /* StatusImages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusImages.swift; sourceTree = "<group>"; };
+		F958CBEF596599B983544593 /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = wrapper.icon; path = AppIcon.icon; sourceTree = "<group>"; };
 		F9AA1A0F780AC86DD170E21C /* SystemEvents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemEvents.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -109,6 +111,7 @@
 			children = (
 				E355BB6D86F5EAC4469C26C8 /* Alerts.swift */,
 				9F38AA0D5A0313126D745C51 /* AppDelegate.swift */,
+				F958CBEF596599B983544593 /* AppIcon.icon */,
 				AF93C02CF1A1D25B2CF4947A /* BarLayout.swift */,
 				A3DA2BB8B1EF14B2DE6FA51A /* GlobalHotKey.swift */,
 				45E566C330E79EA07931E9B0 /* LaunchAtLogin.swift */,
@@ -140,6 +143,7 @@
 			buildConfigurationList = 59EAC6E4096F44E85AD860DF /* Build configuration list for PBXNativeTarget "Barkeep" */;
 			buildPhases = (
 				49F041AC0796EB945743D8F7 /* Sources */,
+				73761DEE6BAAFF487E96DAF3 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -207,6 +211,17 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		73761DEE6BAAFF487E96DAF3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				08E1C982CDE5F8FA0DA685E0 /* AppIcon.icon in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		49F041AC0796EB945743D8F7 /* Sources */ = {
