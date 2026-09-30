@@ -28,6 +28,7 @@ final class MenuBarController {
         if hotKey == nil {
             Log.menuBar.error("Hotkey \(HotKeyCombo.toggle.label, privacy: .public) is already registered by another app")
         }
+        LaunchAtLogin.enableOnFirstInstalledLaunch(settings: settings)
 
         if settings.hasShownWelcome {
             transition(to: .collapsed)

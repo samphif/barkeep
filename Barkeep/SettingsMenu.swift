@@ -1,5 +1,4 @@
 import AppKit
-import ServiceManagement
 
 @MainActor
 struct SettingsMenu {
@@ -50,9 +49,9 @@ struct SettingsMenu {
                 actions.settingsChanged()
             })
         }
-        menu.addItem(ClosureMenuItem("Launch at Login", checked: SMAppService.mainApp.status == .enabled) {
+        menu.addItem(ClosureMenuItem("Launch at Login", checked: LaunchAtLogin.isEnabled) {
             do {
-                try Self.toggleLaunchAtLogin()
+                try LaunchAtLogin.toggle()
             } catch {
                 Alerts.showError("Couldn’t change Launch at Login", error)
             }
@@ -65,15 +64,6 @@ struct SettingsMenu {
         menu.addItem(.separator())
         menu.addItem(NSMenuItem(title: "Quit Barkeep", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
         return menu
-    }
-
-    private static func toggleLaunchAtLogin() throws {
-        let service = SMAppService.mainApp
-        if service.status == .enabled {
-            try service.unregister()
-        } else {
-            try service.register()
-        }
     }
 }
 

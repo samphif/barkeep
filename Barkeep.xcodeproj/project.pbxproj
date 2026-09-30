@@ -18,6 +18,7 @@
 		543D3ED4927884E6D165979B /* BarLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF93C02CF1A1D25B2CF4947A /* BarLayout.swift */; };
 		67A76CCCA64967384F9F07F6 /* MenuBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D676FB3D184012085DC4EA6 /* MenuBarController.swift */; };
 		6F28D7C651F99328D41D6C4E /* SystemEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9AA1A0F780AC86DD170E21C /* SystemEvents.swift */; };
+		7D0B4088EBC83E579567E6D7 /* LaunchAtLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E566C330E79EA07931E9B0 /* LaunchAtLogin.swift */; };
 		957F3F7466C31B196C1FA2FE /* RehideTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6788398ADE179E2630182F /* RehideTests.swift */; };
 		96C93D3434DDFA351AE72698 /* SettingsMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2937AE3EC0DDF1460CB0625 /* SettingsMenu.swift */; };
 		CAE3F8B69CAE6FFDBE58DA9A /* ScrollGestureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DA29A94C2F409516E9C8111 /* ScrollGestureTests.swift */; };
@@ -44,6 +45,7 @@
 		2D676FB3D184012085DC4EA6 /* MenuBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarController.swift; sourceTree = "<group>"; };
 		3533C4D77752FE85786F761E /* ScrollGesture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollGesture.swift; sourceTree = "<group>"; };
 		411A8B2F057202A17472E174 /* RehideTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RehideTimer.swift; sourceTree = "<group>"; };
+		45E566C330E79EA07931E9B0 /* LaunchAtLogin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchAtLogin.swift; sourceTree = "<group>"; };
 		4CAC4C50B71A824231452B8C /* RevealStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RevealStateTests.swift; sourceTree = "<group>"; };
 		550861B24DBABFAA5C5AE258 /* BarkeepTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BarkeepTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		601F0503F3366DE44BF30B40 /* Barkeep.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Barkeep.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -98,6 +100,7 @@
 				9F38AA0D5A0313126D745C51 /* AppDelegate.swift */,
 				AF93C02CF1A1D25B2CF4947A /* BarLayout.swift */,
 				A3DA2BB8B1EF14B2DE6FA51A /* GlobalHotKey.swift */,
+				45E566C330E79EA07931E9B0 /* LaunchAtLogin.swift */,
 				933BEB12593952ABB8E5769C /* Log.swift */,
 				12AFA0CD3542340517C28A37 /* main.swift */,
 				1E86039257FBBD7896365AA7 /* MenuBarActivity.swift */,
@@ -199,6 +202,7 @@
 				112C3CE6B3DB9E4C91DB2EAF /* AppDelegate.swift in Sources */,
 				543D3ED4927884E6D165979B /* BarLayout.swift in Sources */,
 				F8CA0596F3903D7ED61D2DD1 /* GlobalHotKey.swift in Sources */,
+				7D0B4088EBC83E579567E6D7 /* LaunchAtLogin.swift in Sources */,
 				2F09D52A5E30DFE693A18C00 /* Log.swift in Sources */,
 				DD833FF79BE3857CC27FF4F4 /* MenuBarActivity.swift in Sources */,
 				67A76CCCA64967384F9F07F6 /* MenuBarController.swift in Sources */,

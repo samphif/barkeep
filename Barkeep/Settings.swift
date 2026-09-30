@@ -29,6 +29,7 @@ final class Settings {
         static let revealOnScroll = "revealOnScroll"
         static let alwaysHiddenEnabled = "alwaysHiddenEnabled"
         static let hasShownWelcome = "hasShownWelcome"
+        static let hasConfiguredLaunchAtLogin = "hasConfiguredLaunchAtLogin"
     }
 
     private let defaults: UserDefaults
@@ -41,6 +42,7 @@ final class Settings {
             Key.revealOnScroll: true,
             Key.alwaysHiddenEnabled: false,
             Key.hasShownWelcome: false,
+            Key.hasConfiguredLaunchAtLogin: false,
         ])
     }
 
@@ -67,5 +69,10 @@ final class Settings {
     var hasShownWelcome: Bool {
         get { defaults.bool(forKey: Key.hasShownWelcome) }
         set { defaults.set(newValue, forKey: Key.hasShownWelcome) }
+    }
+
+    var hasConfiguredLaunchAtLogin: Bool {
+        get { defaults.bool(forKey: Key.hasConfiguredLaunchAtLogin) }
+        set { defaults.set(newValue, forKey: Key.hasConfiguredLaunchAtLogin) }
     }
 }
