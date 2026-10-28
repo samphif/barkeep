@@ -1,82 +1,84 @@
 # Barkeep
 
-A tiny, free menu bar tidier for macOS. It does the one Bartender job that matters: keep a few icons visible and tuck the rest away until you want them.
+A tiny, native macOS menu bar manager written in ~1,300 lines of Swift. It hides the menu bar icons you don't need staring at you all day and brings them back with a click, a scroll in the menu bar, or a hotkey (`⌃⌥⌘B`).
 
-No Screen Recording permission. Accessibility access is optional: it lets Barkeep hide icons on displays of any width. About 1,100 lines of Swift.
+Built to replace Bartender with code you actually own—zero external dependencies, **zero Screen Recording permissions**, and no mouse-cursor jumping on newer macOS releases.
 
-## Use it
+## Why Barkeep?
 
-1. Launch Barkeep. A bow tie and a thin divider (`│`) appear in the menu bar. When macOS asks, allow Accessibility access (or later: right-click the bow tie, then **Allow Accessibility Access…**).
-2. Hold `⌘` and drag icons:
-   - **Right of the divider:** always visible (Wi-Fi, Control Center, Cursor, one or two more).
-   - **Left of the divider:** hidden.
-3. Show hidden icons by any of:
-   - Clicking the bow tie
-   - Scrolling in the menu bar
-   - Pressing `⌃⌥⌘B`
-   - Hovering over the bow tie (off by default)
-4. They hide again 10 seconds after you stop using the menu bar. Barkeep waits while your pointer is in the menu bar or any menu is open.
+- **Zero Screen Recording permission:** Barkeep never captures pixels of your screen or redraws fake copies of your status items in a secondary floating bar. Every icon you click is the real status item in the real macOS menu bar.
+- **Native hiding + Divider fallback:**
+  - **With Accessibility access (macOS Tahoe / 27+):** Barkeep reads where each icon sits relative to its dividers and uses macOS's native menu bar visibility allow-list (`MenuBarClientCore`) to hide icons left of the divider cleanly across displays of any width—including optional hiding of macOS system items (like Battery or Wi-Fi) when dragged left of the divider.
+  - **Without Accessibility access (Divider Mode):** Barkeep expands its divider to push icons to the left off the bar (capped at 45% of the narrowest display so macOS 27 never discards the status item).
+- **Two sections (Hidden & Always-Hidden):**
+  - Place everyday clutter left of the thin solid divider (`│`)—revealed on click, scroll, hover, or `⌃⌥⌘B`.
+  - Enable the **Always-Hidden Section** for a second dotted divider (`┊`). Icons left of the dotted divider stay tucked away until you `⌥`-click the bow tie.
+- **Smart auto-rehide:** Counts down (5s / 10s / 30s / Never) only after your pointer leaves the menu bar *and* all pop-up menus close, so a menu never collapses out from under your cursor.
+- **Tiny & hackable:** ~1,300 lines of pure Swift (`AppKit`, `Carbon.HIToolbox`, `ServiceManagement`, `ApplicationServices`). Want to tweak a behavior when macOS updates? Change a few lines and rebuild in seconds.
 
-Right-click the bow tie for settings: the auto-hide delay, hover and scroll behavior, the always-hidden section, and Launch at Login.
+## Quick Start
 
-**Always-hidden section (optional):** turning this on adds a dotted divider. Icons left of it stay hidden even after you click the bow tie. `⌥`-click the bow tie to show them.
+### Build & Install
 
-## Build
-
-Requires Xcode and [XcodeGen](https://github.com/yonaskolb/XcodeGen) (`brew install xcodegen`).
+Requires macOS 14.0+ and Xcode 16+.
 
 ```bash
-xcodegen generate
-xcodebuild -project Barkeep.xcodeproj -scheme Barkeep -destination 'platform=macOS' test
-xcodebuild -project Barkeep.xcodeproj -scheme Barkeep -configuration Release -derivedDataPath build build
+./build.sh --install
+open /Applications/Barkeep.app
+```
+
+Or build and test directly with `xcodebuild`:
+
+```bash
+xcodebuild -project Barkeep.xcodeproj -scheme Barkeep test
+xcodebuild -project Barkeep.xcodeproj -scheme Barkeep -configuration Release -derivedDataPath build
 cp -R build/Build/Products/Release/Barkeep.app /Applications/
 ```
 
-The app icon is an Icon Composer file, `Barkeep/AppIcon.icon`. `swift scripts/make-icon.swift` redraws its layers and writes a flat preview to `build/icon-preview.png`.
+### How to Use
 
-## How it works
+1. **Launch Barkeep.** A bow tie icon and a thin divider (`│`) appear in your menu bar.
+2. **Hold `⌘` and drag menu bar icons:**
+   - **Right of the divider (`│`):** Always visible.
+   - **Left of the divider (`│`):** Hidden when collapsed.
+   - **Left of the dotted divider (`┊`, when Always-Hidden is enabled):** Hidden until you `⌥`-click the bow tie.
+3. **Reveal hidden icons anytime:**
+   - **Click** the bow tie (`⌥`-click to include the Always-Hidden section)
+   - **Scroll** (two-finger swipe or mouse wheel) anywhere in the menu bar
+   - **Press `⌃⌥⌘B`** from anywhere (registered via Carbon hot keys—no Accessibility permission required)
+   - **Hover** over the bow tie (optional toggle in settings)
+4. **Right-click the bow tie** for settings: Auto-Hide delay (`5s`, `10s`, `30s`, `Never`), Show on Hover, Show on Scroll, Always-Hidden Section, Divider Mode (stretched divider / system-item hiding fallback), and Launch at Login.
 
-Barkeep owns three status items:
+## How It Works
 
+Barkeep owns three `NSStatusItem`s created in right-to-left order:
+
+```text
+[ always-hidden ┊ ]  [ hidden │ ]  [ bow tie ]   Wi-Fi  Control Center  Clock
 ```
-[ always-hidden · ] [ hidden │ ] [ bow tie ]   Wi-Fi  Control Center  Clock
-```
 
-**With Accessibility access (macOS 27):** Barkeep reads where every app's icons sit relative to its dividers, then asks macOS to show only the apps on the visible side. It uses the menu bar allow-list behind macOS's exam lockdown mode, from the private `MenuBarClientCore` framework, as [Hidden Bar](https://github.com/dwarvesf/hidden) does. The dividers are thin lines while expanded, so you can `⌘`-drag icons past them, and disappear while collapsed. Hiding doesn't depend on display width. macOS lifts the restriction if Barkeep quits, and Barkeep shows everything if it can't find its divider or macOS refuses the request.
+- **Native Hiding (macOS 27+ with Accessibility):** Barkeep inspects status item frames via Accessibility (`MenuBarInventory`), partitions owners relative to the `│` and `┊` dividers (`MenuBarSections`), and applies a menu bar allow-list via `MenuBarClientCore` (`NativeVisibility`). While collapsed, the dividers shrink to `0pt` so only the bow tie and your visible icons remain. If Barkeep quits, macOS automatically lifts the restriction.
+- **Stretched Divider Mode (Zero Permissions):** To collapse, Barkeep widens the active divider to `45%` of the narrowest connected screen width (`BarLayout.collapsedLength`), displacing icons to its left. To expand, it shrinks the divider back to `12pt`.
+- **Trackpad & Wheel Scroll Debouncing:** `ScrollGesture` turns a continuous trackpad gesture into a single toggle and ignores momentum events, so a quick flick in the menu bar never double-toggles.
+- **Menu Activity Detection:** `MenuBarActivity` checks mouse coordinates and `CGWindowListCopyWindowInfo` for pop-up menu window levels (`kCGPopUpMenuWindowLevelKey`)—requiring zero Screen Recording permissions.
 
-**Without it:** to collapse, Barkeep widens the hidden divider to 45% of your narrowest display's width. That leaves no room for the icons to its left, so they move into the system's `«` overflow menu. To expand, Barkeep shrinks the divider back to 12 points. The always-hidden divider stays wide unless you `⌥`-click. Hidden Bar, Dozer, and early Ice all used the same trick with a fixed 10,000-point width.
-
-The hotkey is a Carbon hot key, and scroll-to-show uses a global mouse monitor. Neither needs Accessibility permission. Each trackpad swipe toggles at most once, and momentum scrolling is ignored. Barkeep detects open menus by reading window levels, which doesn't need Screen Recording.
-
-To see what Barkeep is doing:
+To stream live logs while debugging:
 
 ```bash
 log stream --level info --predicate 'subsystem == "com.samuelphifer.Barkeep"'
 ```
 
-## What Bartender does, and what Barkeep keeps
+## Bartender vs. Barkeep
 
-Sources: the [Bartender 6](https://www.macbartender.com/Bartender6/) and [Bartender 7](https://www.macbartender.com/) pages, plus the [support page](https://www.macbartender.com/Bartender6/support/).
+| Feature | Bartender 6 | Barkeep |
+| :--- | :--- | :--- |
+| **Price & Ownership** | Paid license ($20+ per major version), closed source | **Free, MIT Open Source, ~1,300 lines of Swift** |
+| **Screen Recording Permission** | Required for Bartender Bar / hover / presets | **Never required** |
+| **Click / Scroll / Hover / Hotkey (`⌃⌥⌘B`)** | Yes | **Yes** |
+| **Hidden + Always-Hidden (`⌥`-click) sections** | Yes | **Yes (solid `│` + dotted `┊` dividers)** |
+| **Auto-rehide that waits for open menus** | Yes | **Yes (5s / 10s / 30s / Never)** |
+| **Mouse cursor hijacking on macOS Tahoe / 27** | Known issue when interacting with Bartender Bar | **None — icons stay native in the system menu bar** |
 
-| Bartender feature | Barkeep | Notes |
-| --- | --- | --- |
-| Hide menu bar items, show on click | Yes | The core feature |
-| Show on hover / scroll / swipe | Hover over the bow tie, scroll anywhere in the menu bar | Bartender's hover works over any empty space in the menu bar. Detecting that needs screen reading. |
-| Hotkey | `⌃⌥⌘B` | Fixed for now |
-| Auto-rehide | 5 / 10 / 30 seconds or never | Counts down after you stop using the menu bar or an open menu |
-| Always-hidden items | Optional dotted divider | |
-| Launch at login | Yes | `SMAppService` |
-| Bartender Bar (hidden items in a panel below the menu bar) | No | Needs Screen Recording to draw copies of other apps' icons, plus Accessibility to click them. On Tahoe it also moves your mouse, which the support page lists as a known problem. |
-| Notch handling (auto-hide items stuck behind the notch) | No | Keep the always-visible set small, and the notch isn't an issue |
-| Quick Search / Command Bar | No | Needs Accessibility |
-| Presets, profiles, triggers (Wi-Fi, battery, time, location) | No | A lot of machinery for a simple bar |
-| Groups, widgets, spacers, styling, tints, spacing | No | Cosmetic |
-| Item indexing (keep order after reboot) | Built in | macOS remembers the order you `⌘`-drag into |
+## License
 
-## macOS 27 notes
-
-- **Half-width limit:** macOS 27 throws away any status item wider than half the display, instead of shrinking it. A 10,000-point divider just disappears and hides nothing. That's why the fallback caps the divider at 45% of the narrowest attached display.
-- **Large external displays:** without Accessibility access, the cap follows your narrowest screen, so a much wider display still has room for hidden icons. Native hiding has no such limit.
-- **Per app, not per icon:** native hiding works by app. An app with icons on both sides of the divider stays visible. macOS's own items (clock, Wi-Fi, Control Center) always stay visible.
-- **New apps while collapsed:** an app launched while icons are hidden stays hidden until you next reveal, just as a new icon lands left of the divider.
-- **Placeholder positions:** `MenuBarAgent` draws the menu bar, and apps' status item windows report overlapping placeholder frames. Barkeep reads real positions through Accessibility instead. If the bow tie ever ends up hidden, press `⌃⌥⌘B` or scroll in the menu bar to bring everything back, then `⌘`-drag the divider to the left of the bow tie.
+Released under the [MIT License](LICENSE).

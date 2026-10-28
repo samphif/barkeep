@@ -13,6 +13,7 @@ struct SettingsMenu {
         ("Show on Hover Over Bow Tie", \.revealOnHover),
         ("Show on Scroll in Menu Bar", \.revealOnScroll),
         ("Always-Hidden Section", \.alwaysHiddenEnabled),
+        ("Divider Mode", \.preferDividerMode),
     ]
 
     let state: RevealState

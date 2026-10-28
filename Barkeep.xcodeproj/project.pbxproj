@@ -184,11 +184,10 @@
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					21F3BB9573A3D3F6DB4E1D85 = {
-						DevelopmentTeam = 9N867BCJ32;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 					};
 					DB68682C9CCFD2594A14643D = {
-						DevelopmentTeam = 9N867BCJ32;
+						ProvisioningStyle = Manual;
 					};
 				};
 			};
@@ -278,8 +277,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				CODE_SIGNING_REQUIRED = NO;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = 9N867BCJ32;
 				GENERATE_INFOPLIST_FILE = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -296,9 +297,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				CODE_SIGNING_REQUIRED = NO;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = 9N867BCJ32;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = Barkeep/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -315,9 +317,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				CODE_SIGNING_REQUIRED = NO;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = 9N867BCJ32;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = Barkeep/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -392,8 +395,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				CODE_SIGNING_REQUIRED = NO;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = 9N867BCJ32;
 				GENERATE_INFOPLIST_FILE = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

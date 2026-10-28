@@ -7,9 +7,6 @@ import Foundation
 @MainActor
 enum NativeVisibility {
     private static let frameworkPath = "/System/Library/PrivateFrameworks/MenuBarClientCore.framework/MenuBarClientCore"
-    /// macOS's own items (clock, Wi-Fi, Control Center…) always stay visible. Unknown
-    /// identifiers are ignored, so the range covers items a given Mac doesn't have.
-    private static let systemItems = (0..<64).map { NSNumber(value: $0) } as NSArray
 
     private static let classes: (configuration: AssessmentConfiguration.Type, assertion: AssessmentAssertion.Type)? = {
         guard dlopen(frameworkPath, RTLD_NOW | RTLD_LOCAL) != nil,
@@ -27,11 +24,17 @@ enum NativeVisibility {
 
     static var isAvailable: Bool { classes != nil }
 
-    /// Hides every other app's status items except those of `bundleIDs`.
-    static func restrict(allowing bundleIDs: [String]) async throws -> VisibilityRestriction {
+    static var allSystemItems: [NSNumber] {
+        SystemItemID.allowListRange.map { NSNumber(value: $0) }
+    }
+
+    /// Hides every other app's status items except those of `bundleIDs`, and every system
+    /// item whose id is missing from `systemItems`. Pass `allSystemItems` to leave macOS's
+    /// own icons alone; omit Battery / Wi-Fi ids to hide ones the user dragged left of the divider.
+    static func restrict(allowing bundleIDs: [String], systemItems: [NSNumber] = allSystemItems) async throws -> VisibilityRestriction {
         guard let classes else { throw NativeVisibilityError.unavailable }
         // The framework indexes into both lists, so they must be arrays, not sets.
-        let configuration = classes.configuration.init(allowedSystemItems: systemItems, allowedBundleIdentifiers: bundleIDs as NSArray)
+        let configuration = classes.configuration.init(allowedSystemItems: systemItems as NSArray, allowedBundleIdentifiers: bundleIDs as NSArray)
         let assertion = classes.assertion.init()
         try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
             assertion.activate(with: configuration) { error in

@@ -31,7 +31,7 @@ final class MenuBarController {
             Log.menuBar.error("Hotkey \(HotKeyCombo.toggle.label, privacy: .public) is already registered by another app")
         }
         LaunchAtLogin.enableOnFirstInstalledLaunch(settings: settings)
-        if NativeVisibility.isAvailable && !MenuBarInventory.isTrusted {
+        if !settings.preferDividerMode && NativeVisibility.isAvailable && !MenuBarInventory.isTrusted {
             MenuBarInventory.requestTrust()
         }
 
@@ -60,10 +60,10 @@ final class MenuBarController {
         transition(to: state.toggled(showAll: showAll && settings.alwaysHiddenEnabled))
     }
 
-    /// Native hiding when macOS offers it and Barkeep has Accessibility access; otherwise
-    /// the stretched divider, which can't cover displays much wider than the narrowest.
+    /// Native hiding when macOS offers it, Accessibility is granted, and Divider Mode is
+    /// off; otherwise the stretched divider, which also tucks system icons left of it.
     private func relayout() {
-        if NativeHiding.isUsable {
+        if useNativeHiding {
             nativeHiding.apply(state, alwaysHiddenEnabled: settings.alwaysHiddenEnabled) { [weak self] in self?.showItems() }
         } else {
             nativeHiding.lift()
@@ -71,10 +71,12 @@ final class MenuBarController {
         showItems()
     }
 
+    private var useNativeHiding: Bool { NativeHiding.isUsable && !settings.preferDividerMode }
+
     /// The dividers disappear only once native hiding is in effect, since it reads their
     /// position first.
     private func showItems() {
-        let style: DividerStyle = if !NativeHiding.isUsable {
+        let style: DividerStyle = if !useNativeHiding {
             .stretched
         } else if state == .collapsed && nativeHiding.isCollapsed {
             .hidden
@@ -112,7 +114,7 @@ final class MenuBarController {
             settings: settings,
             hotKey: .toggle,
             hotKeyAvailable: hotKey != nil,
-            needsAccessibility: NativeVisibility.isAvailable && !MenuBarInventory.isTrusted,
+            needsAccessibility: !settings.preferDividerMode && NativeVisibility.isAvailable && !MenuBarInventory.isTrusted,
             actions: SettingsMenu.Actions(
                 toggle: { [weak self] in self?.toggle(showAll: false) },
                 showAll: { [weak self] in self?.transition(to: .expandedAll) },

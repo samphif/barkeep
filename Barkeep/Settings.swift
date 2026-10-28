@@ -28,6 +28,7 @@ final class Settings {
         static let revealOnHover = "revealOnHover"
         static let revealOnScroll = "revealOnScroll"
         static let alwaysHiddenEnabled = "alwaysHiddenEnabled"
+        static let preferDividerMode = "preferDividerMode"
         static let hasShownWelcome = "hasShownWelcome"
         static let hasConfiguredLaunchAtLogin = "hasConfiguredLaunchAtLogin"
     }
@@ -41,6 +42,7 @@ final class Settings {
             Key.revealOnHover: false,
             Key.revealOnScroll: true,
             Key.alwaysHiddenEnabled: false,
+            Key.preferDividerMode: false,
             Key.hasShownWelcome: false,
             Key.hasConfiguredLaunchAtLogin: false,
         ])
@@ -64,6 +66,13 @@ final class Settings {
     var alwaysHiddenEnabled: Bool {
         get { defaults.bool(forKey: Key.alwaysHiddenEnabled) }
         set { defaults.set(newValue, forKey: Key.alwaysHiddenEnabled) }
+    }
+
+    /// Force the stretched-divider fallback even when native hiding is available.
+    /// Useful for system extras that lack an allow-list id, or when Accessibility is denied.
+    var preferDividerMode: Bool {
+        get { defaults.bool(forKey: Key.preferDividerMode) }
+        set { defaults.set(newValue, forKey: Key.preferDividerMode) }
     }
 
     var hasShownWelcome: Bool {
